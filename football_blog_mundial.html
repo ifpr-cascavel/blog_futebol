@@ -1,0 +1,1629 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GolMundial — O futebol sem fronteiras</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --green: #00C853;
+    --green-dark: #00962C;
+    --green-neon: #39FF14;
+    --black: #0A0A0A;
+    --dark: #111111;
+    --dark2: #1A1A1A;
+    --dark3: #222222;
+    --card: #181818;
+    --border: rgba(255,255,255,0.08);
+    --text: #F0F0F0;
+    --muted: #888;
+    --accent: #FFD700;
+    --red: #E53935;
+    --white: #FFFFFF;
+    --radius: 12px;
+    --radius-sm: 8px;
+  }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--black);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* SCROLLBAR */
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: var(--dark); }
+  ::-webkit-scrollbar-thumb { background: var(--green); border-radius: 4px; }
+
+  /* ====== HEADER ====== */
+  header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(10,10,10,0.95);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 2rem;
+  }
+
+  .header-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 64px;
+    gap: 2rem;
+  }
+
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  .logo-icon {
+    width: 36px;
+    height: 36px;
+    background: var(--green);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+  }
+
+  .logo-text {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 26px;
+    letter-spacing: 2px;
+    color: var(--white);
+    line-height: 1;
+  }
+
+  .logo-text span { color: var(--green); }
+
+  nav { display: flex; align-items: center; gap: 0; }
+
+  nav a {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--muted);
+    text-decoration: none;
+    padding: 8px 14px;
+    border-radius: var(--radius-sm);
+    transition: all 0.2s;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+
+  nav a:hover, nav a.active {
+    color: var(--white);
+    background: rgba(255,255,255,0.06);
+  }
+
+  nav a.active { color: var(--green); }
+
+  .header-right { display: flex; align-items: center; gap: 12px; }
+
+  .search-btn {
+    width: 36px; height: 36px;
+    background: var(--dark2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    color: var(--muted);
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 15px;
+    transition: all 0.2s;
+  }
+  .search-btn:hover { background: var(--dark3); color: var(--white); }
+
+  .cta-btn {
+    background: var(--green);
+    color: var(--black);
+    border: none;
+    border-radius: var(--radius-sm);
+    font-size: 12px;
+    font-weight: 700;
+    padding: 8px 16px;
+    cursor: pointer;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    transition: all 0.2s;
+  }
+  .cta-btn:hover { background: var(--green-neon); transform: translateY(-1px); }
+
+  /* ====== TICKER ====== */
+  .ticker-bar {
+    background: var(--green);
+    padding: 7px 0;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .ticker-label {
+    position: absolute; left: 0; top: 0; bottom: 0;
+    background: var(--black);
+    color: var(--green);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 0 16px;
+    display: flex; align-items: center;
+    z-index: 2;
+  }
+
+  .ticker-content {
+    display: flex;
+    animation: ticker 30s linear infinite;
+    padding-left: 140px;
+    white-space: nowrap;
+  }
+
+  .ticker-item {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--black);
+    padding: 0 24px;
+    display: flex; align-items: center; gap: 8px;
+  }
+
+  .ticker-score {
+    background: var(--black);
+    color: var(--green);
+    font-size: 11px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 4px;
+  }
+
+  @keyframes ticker {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+
+  /* ====== HERO ====== */
+  .hero {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 3rem 2rem 2rem;
+  }
+
+  .hero-grid {
+    display: grid;
+    grid-template-columns: 1fr 380px;
+    gap: 1.5rem;
+    align-items: start;
+  }
+
+  .hero-main {
+    position: relative;
+    border-radius: 16px;
+    overflow: hidden;
+    cursor: pointer;
+    group: true;
+  }
+
+  .hero-img {
+    width: 100%;
+    height: 460px;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.5s ease;
+  }
+
+  .hero-main:hover .hero-img { transform: scale(1.03); }
+
+  .hero-gradient {
+    position: absolute; inset: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.4) 50%, transparent 100%);
+  }
+
+  .hero-content {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    padding: 2rem;
+  }
+
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: var(--green);
+    color: var(--black);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 4px 12px;
+    border-radius: 4px;
+    margin-bottom: 1rem;
+  }
+
+  .hero-badge::before {
+    content: '';
+    width: 6px; height: 6px;
+    background: var(--black);
+    border-radius: 50%;
+    animation: pulse 1.5s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(0.8); }
+  }
+
+  .hero-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.2rem;
+    font-weight: 700;
+    line-height: 1.15;
+    color: var(--white);
+    margin-bottom: 0.75rem;
+  }
+
+  .hero-meta {
+    display: flex; align-items: center; gap: 12px;
+    font-size: 12px; color: rgba(255,255,255,0.6);
+  }
+
+  .hero-meta span { display: flex; align-items: center; gap: 4px; }
+
+  /* SIDE CARDS */
+  .hero-side { display: flex; flex-direction: column; gap: 1rem; }
+
+  .side-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    cursor: pointer;
+    transition: all 0.3s;
+    display: flex;
+    gap: 0;
+  }
+
+  .side-card:hover { border-color: rgba(0,200,83,0.3); transform: translateX(4px); }
+
+  .side-img {
+    width: 110px;
+    min-width: 110px;
+    height: 100px;
+    object-fit: cover;
+  }
+
+  .side-body { padding: 12px; flex: 1; display: flex; flex-direction: column; justify-content: space-between; }
+
+  .side-cat {
+    font-size: 10px; font-weight: 700;
+    color: var(--green);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+
+  .side-title {
+    font-size: 13px; font-weight: 600;
+    color: var(--white);
+    line-height: 1.4;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .side-meta { font-size: 11px; color: var(--muted); margin-top: 6px; }
+
+  /* ====== SECTION TITLES ====== */
+  .section-header {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 1.5rem;
+  }
+
+  .section-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.8rem;
+    letter-spacing: 2px;
+    color: var(--white);
+    display: flex; align-items: center; gap: 12px;
+  }
+
+  .section-title::before {
+    content: '';
+    width: 4px; height: 28px;
+    background: var(--green);
+    border-radius: 2px;
+    display: block;
+  }
+
+  .see-all {
+    font-size: 12px; font-weight: 600;
+    color: var(--green); cursor: pointer;
+    text-decoration: none;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    transition: opacity 0.2s;
+  }
+  .see-all:hover { opacity: 0.7; }
+
+  /* ====== MAIN CONTENT AREA ====== */
+  .main-area {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem 2rem 4rem;
+    display: grid;
+    grid-template-columns: 1fr 320px;
+    gap: 3rem;
+    align-items: start;
+  }
+
+  .content-left { display: flex; flex-direction: column; gap: 3rem; }
+
+  /* ====== CATEGORIES TABS ====== */
+  .cat-tabs {
+    display: flex; gap: 8px;
+    overflow-x: auto;
+    padding-bottom: 4px;
+    scrollbar-width: none;
+  }
+  .cat-tabs::-webkit-scrollbar { display: none; }
+
+  .cat-tab {
+    background: var(--dark2);
+    border: 1px solid var(--border);
+    color: var(--muted);
+    font-size: 12px;
+    font-weight: 600;
+    padding: 7px 16px;
+    border-radius: 100px;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.2s;
+    letter-spacing: 0.3px;
+  }
+
+  .cat-tab:hover { color: var(--white); border-color: rgba(255,255,255,0.2); }
+  .cat-tab.active { background: var(--green); color: var(--black); border-color: var(--green); }
+
+  /* ====== POST CARDS ====== */
+  .posts-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; }
+
+  .post-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+
+  .post-card:hover {
+    border-color: rgba(0,200,83,0.25);
+    transform: translateY(-4px);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.4);
+  }
+
+  .post-img-wrap { position: relative; overflow: hidden; }
+
+  .post-img {
+    width: 100%; height: 180px; object-fit: cover;
+    display: block;
+    transition: transform 0.4s;
+  }
+
+  .post-card:hover .post-img { transform: scale(1.06); }
+
+  .post-cat {
+    position: absolute; top: 12px; left: 12px;
+    background: var(--green);
+    color: var(--black);
+    font-size: 10px; font-weight: 700;
+    letter-spacing: 1px; text-transform: uppercase;
+    padding: 3px 10px; border-radius: 4px;
+  }
+
+  .post-body { padding: 1rem; }
+
+  .post-title {
+    font-size: 15px; font-weight: 700;
+    color: var(--white);
+    line-height: 1.4;
+    margin-bottom: 8px;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .post-excerpt {
+    font-size: 12px; color: var(--muted);
+    line-height: 1.6;
+    margin-bottom: 12px;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .post-footer {
+    display: flex; align-items: center; justify-content: space-between;
+    border-top: 1px solid var(--border);
+    padding-top: 10px;
+    margin-top: 4px;
+  }
+
+  .post-author { display: flex; align-items: center; gap: 6px; }
+
+  .author-ava {
+    width: 24px; height: 24px; border-radius: 50%;
+    background: var(--green);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 10px; font-weight: 700; color: var(--black);
+  }
+
+  .author-name { font-size: 11px; color: var(--muted); }
+
+  .post-date { font-size: 11px; color: var(--muted); }
+
+  /* FEATURED WIDE CARD */
+  .post-card.wide {
+    grid-column: span 2;
+    display: grid;
+    grid-template-columns: 280px 1fr;
+  }
+
+  .post-card.wide .post-img { height: 100%; min-height: 200px; }
+  .post-card.wide .post-img-wrap { height: auto; }
+  .post-card.wide .post-body { padding: 1.5rem; display: flex; flex-direction: column; justify-content: center; }
+  .post-card.wide .post-title { font-size: 18px; -webkit-line-clamp: 3; }
+  .post-card.wide .post-excerpt { -webkit-line-clamp: 3; }
+
+  /* ====== SIDEBAR ====== */
+  .sidebar { display: flex; flex-direction: column; gap: 1.5rem; }
+
+  .sidebar-widget {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.25rem;
+  }
+
+  .widget-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.1rem;
+    letter-spacing: 2px;
+    color: var(--white);
+    margin-bottom: 1rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; gap: 8px;
+  }
+
+  .widget-title::before {
+    content: '';
+    width: 3px; height: 18px;
+    background: var(--green);
+    border-radius: 2px;
+    display: block;
+  }
+
+  /* SCORES WIDGET */
+  .score-item {
+    display: flex; align-items: center; gap: 0;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .score-item:last-child { border-bottom: none; padding-bottom: 0; }
+
+  .score-league {
+    font-size: 9px; color: var(--muted);
+    font-weight: 600; letter-spacing: 0.5px;
+    text-transform: uppercase;
+    width: 32px; text-align: center; min-width: 32px;
+    line-height: 1.2;
+  }
+
+  .score-teams { flex: 1; padding: 0 8px; }
+
+  .score-team {
+    font-size: 12px; font-weight: 500; color: var(--text);
+    display: flex; align-items: center; gap: 6px;
+    padding: 2px 0;
+  }
+
+  .team-badge {
+    width: 18px; height: 18px; border-radius: 3px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 10px;
+  }
+
+  .score-result {
+    text-align: center; min-width: 44px;
+  }
+
+  .score-nums {
+    font-size: 14px; font-weight: 700; color: var(--white);
+    display: flex; flex-direction: column; gap: 2px; align-items: center;
+  }
+
+  .score-num { line-height: 1.3; }
+
+  .score-status {
+    font-size: 9px; letter-spacing: 0.5px;
+    text-transform: uppercase;
+    padding: 2px 6px; border-radius: 3px;
+    font-weight: 700; margin-top: 4px;
+  }
+
+  .live { background: var(--red); color: white; animation: blink 1.5s infinite; }
+  @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.6; } }
+  .fim { background: var(--dark3); color: var(--muted); }
+
+  /* TRENDING */
+  .trending-item {
+    display: flex; align-items: start; gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .trending-item:last-child { border-bottom: none; padding-bottom: 0; }
+  .trending-item:hover .trending-title { color: var(--green); }
+
+  .trending-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.8rem;
+    color: var(--dark3);
+    line-height: 1;
+    min-width: 28px;
+  }
+
+  .trending-num.top { color: var(--green); }
+
+  .trending-title {
+    font-size: 13px; font-weight: 600; color: var(--white);
+    line-height: 1.4;
+    transition: color 0.2s;
+  }
+
+  .trending-cat {
+    font-size: 10px; color: var(--muted);
+    margin-top: 3px;
+  }
+
+  /* NEWSLETTER WIDGET */
+  .newsletter-widget {
+    background: linear-gradient(135deg, #002C16, #004D25);
+    border: 1px solid rgba(0,200,83,0.2);
+    border-radius: var(--radius);
+    padding: 1.5rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .newsletter-widget::before {
+    content: '⚽';
+    position: absolute; right: -10px; bottom: -15px;
+    font-size: 80px; opacity: 0.08;
+  }
+
+  .newsletter-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.4rem; letter-spacing: 1.5px;
+    color: var(--white); margin-bottom: 6px;
+  }
+
+  .newsletter-sub {
+    font-size: 12px; color: rgba(255,255,255,0.6);
+    margin-bottom: 1rem; line-height: 1.5;
+  }
+
+  .newsletter-input {
+    width: 100%;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: var(--radius-sm);
+    color: var(--white);
+    font-size: 13px;
+    padding: 10px 12px;
+    margin-bottom: 8px;
+    outline: none;
+    transition: border 0.2s;
+  }
+
+  .newsletter-input::placeholder { color: rgba(255,255,255,0.35); }
+  .newsletter-input:focus { border-color: var(--green); }
+
+  .newsletter-btn {
+    width: 100%;
+    background: var(--green);
+    color: var(--black);
+    border: none;
+    border-radius: var(--radius-sm);
+    font-size: 12px; font-weight: 700;
+    letter-spacing: 1px; text-transform: uppercase;
+    padding: 10px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .newsletter-btn:hover { background: var(--green-neon); }
+
+  /* TAGS CLOUD */
+  .tags-cloud { display: flex; flex-wrap: wrap; gap: 6px; }
+
+  .tag {
+    background: var(--dark2);
+    border: 1px solid var(--border);
+    color: var(--muted);
+    font-size: 11px; font-weight: 500;
+    padding: 5px 12px;
+    border-radius: 100px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .tag:hover { border-color: var(--green); color: var(--green); }
+
+  /* ====== MATCHES SECTION ====== */
+  .matches-section {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem 3rem;
+  }
+
+  .matches-strip {
+    display: flex; gap: 1rem;
+    overflow-x: auto;
+    padding-bottom: 8px;
+    scrollbar-width: none;
+  }
+  .matches-strip::-webkit-scrollbar { display: none; }
+
+  .match-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.25rem;
+    min-width: 200px;
+    cursor: pointer;
+    transition: all 0.3s;
+    flex-shrink: 0;
+  }
+
+  .match-card:hover { border-color: rgba(0,200,83,0.3); transform: translateY(-3px); }
+
+  .match-league-label {
+    font-size: 10px; color: var(--muted);
+    font-weight: 600; letter-spacing: 1px;
+    text-transform: uppercase; margin-bottom: 12px;
+    display: flex; align-items: center; gap: 6px;
+  }
+
+  .match-league-label::before {
+    content: '';
+    width: 6px; height: 6px;
+    background: var(--green); border-radius: 50%;
+  }
+
+  .match-teams {
+    display: flex; align-items: center; justify-content: space-between; gap: 8px;
+  }
+
+  .match-team { text-align: center; flex: 1; }
+
+  .match-team-name {
+    font-size: 11px; font-weight: 700; color: var(--white);
+    margin-top: 6px;
+  }
+
+  .match-team-emoji { font-size: 24px; }
+
+  .match-vs {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.5rem; color: var(--muted);
+    text-align: center; min-width: 40px;
+  }
+
+  .match-score-big {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2rem; color: var(--white);
+    text-align: center;
+  }
+
+  .match-time {
+    text-align: center; margin-top: 10px;
+    font-size: 11px; color: var(--muted);
+  }
+
+  .match-time .live-badge {
+    display: inline-block;
+    background: var(--red);
+    color: white;
+    font-size: 9px; font-weight: 700;
+    letter-spacing: 1px; text-transform: uppercase;
+    padding: 2px 8px; border-radius: 3px;
+    animation: blink 1.5s infinite;
+  }
+
+  /* ====== STATS BAR ====== */
+  .stats-bar {
+    background: var(--dark2);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 1.5rem 2rem;
+    margin-bottom: 0;
+  }
+
+  .stats-inner {
+    max-width: 1200px; margin: 0 auto;
+    display: flex; justify-content: space-around; align-items: center;
+    flex-wrap: wrap; gap: 1.5rem;
+  }
+
+  .stat-item { text-align: center; }
+
+  .stat-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2.5rem; color: var(--green);
+    line-height: 1;
+  }
+
+  .stat-label { font-size: 11px; color: var(--muted); font-weight: 500; margin-top: 2px; letter-spacing: 0.5px; text-transform: uppercase; }
+
+  /* ====== FOOTER ====== */
+  footer {
+    background: var(--dark);
+    border-top: 1px solid var(--border);
+    padding: 3rem 2rem 1.5rem;
+  }
+
+  .footer-inner {
+    max-width: 1200px; margin: 0 auto;
+  }
+
+  .footer-grid {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr 1fr 1fr;
+    gap: 2rem;
+    margin-bottom: 2.5rem;
+  }
+
+  .footer-logo-text {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2rem; letter-spacing: 2px; color: var(--white);
+    margin-bottom: 0.5rem;
+  }
+
+  .footer-logo-text span { color: var(--green); }
+
+  .footer-desc { font-size: 13px; color: var(--muted); line-height: 1.7; margin-bottom: 1rem; }
+
+  .footer-socials { display: flex; gap: 8px; }
+
+  .social-btn {
+    width: 34px; height: 34px;
+    background: var(--dark2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 15px; cursor: pointer;
+    transition: all 0.2s;
+    text-decoration: none;
+  }
+
+  .social-btn:hover { background: var(--green); border-color: var(--green); }
+
+  .footer-col-title {
+    font-size: 11px; font-weight: 700;
+    letter-spacing: 1.5px; text-transform: uppercase;
+    color: var(--muted); margin-bottom: 1rem;
+  }
+
+  .footer-links { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+
+  .footer-links a {
+    font-size: 13px; color: var(--muted);
+    text-decoration: none; cursor: pointer;
+    transition: color 0.2s;
+  }
+
+  .footer-links a:hover { color: var(--green); }
+
+  .footer-bottom {
+    border-top: 1px solid var(--border);
+    padding-top: 1.5rem;
+    display: flex; align-items: center; justify-content: space-between;
+    flex-wrap: wrap; gap: 1rem;
+  }
+
+  .footer-bottom p { font-size: 12px; color: var(--muted); }
+
+  .footer-bottom-links { display: flex; gap: 1rem; }
+  .footer-bottom-links a { font-size: 12px; color: var(--muted); text-decoration: none; cursor: pointer; }
+  .footer-bottom-links a:hover { color: var(--white); }
+
+  /* ====== READING PROGRESS ====== */
+  .progress-bar {
+    position: fixed; top: 64px; left: 0; right: 0;
+    height: 2px; background: transparent; z-index: 99;
+  }
+
+  .progress-fill {
+    height: 100%; background: var(--green);
+    width: 0%; transition: width 0.1s;
+    box-shadow: 0 0 8px rgba(0,200,83,0.5);
+  }
+
+  /* ====== FAKE IMAGES ====== */
+  .fake-img {
+    width: 100%;
+    height: 100%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 3rem;
+    position: absolute; inset: 0;
+  }
+
+  .img-soccer { background: linear-gradient(135deg, #1a3a2a, #0d2019); }
+  .img-soccer2 { background: linear-gradient(135deg, #1a1a3a, #0d0d2a); }
+  .img-soccer3 { background: linear-gradient(135deg, #3a1a1a, #2a0d0d); }
+  .img-soccer4 { background: linear-gradient(135deg, #2a2a1a, #1a1a0d); }
+
+  /* ====== PAGE SECTIONS ====== */
+  .page { display: none; }
+  .page.active { display: block; }
+
+  /* POST PAGE */
+  .post-page {
+    max-width: 800px; margin: 0 auto; padding: 2rem 2rem 4rem;
+  }
+
+  .post-page-header { margin-bottom: 2rem; }
+
+  .post-page-cat {
+    display: inline-block;
+    background: var(--green); color: var(--black);
+    font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase;
+    padding: 4px 14px; border-radius: 4px; margin-bottom: 1rem;
+  }
+
+  .post-page-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.5rem; font-weight: 700;
+    line-height: 1.2; color: var(--white); margin-bottom: 1rem;
+  }
+
+  .post-page-meta {
+    display: flex; align-items: center; gap: 1.5rem; flex-wrap: wrap;
+    font-size: 13px; color: var(--muted);
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .post-page-meta span { display: flex; align-items: center; gap: 6px; }
+
+  .post-feature-img {
+    width: 100%; height: 420px; border-radius: var(--radius);
+    overflow: hidden; margin-bottom: 2rem; position: relative;
+  }
+
+  .post-content {
+    font-size: 16px; line-height: 1.8; color: rgba(240,240,240,0.85);
+  }
+
+  .post-content p { margin-bottom: 1.5rem; }
+
+  .post-content h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.6rem; color: var(--white); margin: 2rem 0 1rem;
+  }
+
+  .post-content blockquote {
+    border-left: 3px solid var(--green);
+    padding: 1rem 1.5rem;
+    background: rgba(0,200,83,0.05);
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    font-style: italic; font-size: 1.1rem;
+    color: rgba(240,240,240,0.7);
+    margin: 2rem 0;
+  }
+
+  .post-share {
+    display: flex; align-items: center; gap: 12px;
+    padding: 1.5rem 0; border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border); margin: 2rem 0;
+  }
+
+  .share-label { font-size: 13px; font-weight: 600; color: var(--muted); }
+
+  .share-btn {
+    padding: 8px 16px;
+    border-radius: 100px;
+    font-size: 12px; font-weight: 600;
+    border: 1px solid var(--border);
+    background: var(--dark2);
+    color: var(--muted);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .share-btn:hover { color: var(--white); border-color: rgba(255,255,255,0.2); }
+  .share-btn.whatsapp:hover { background: #25D366; border-color: #25D366; color: white; }
+  .share-btn.twitter:hover { background: #1DA1F2; border-color: #1DA1F2; color: white; }
+
+  /* ====== BACK BTN ====== */
+  .back-btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-size: 13px; font-weight: 600; color: var(--muted);
+    cursor: pointer; padding: 0.75rem 0;
+    transition: color 0.2s;
+    margin-bottom: 1rem;
+  }
+  .back-btn:hover { color: var(--green); }
+
+  /* RESPONSIVE */
+  @media (max-width: 900px) {
+    .hero-grid { grid-template-columns: 1fr; }
+    .hero-side { flex-direction: row; flex-wrap: wrap; }
+    .side-card { flex: 1; min-width: 200px; }
+    .main-area { grid-template-columns: 1fr; }
+    .footer-grid { grid-template-columns: 1fr 1fr; }
+    .posts-grid { grid-template-columns: 1fr; }
+    .post-card.wide { grid-template-columns: 1fr; }
+    .post-card.wide .post-img { height: 200px; }
+    nav { display: none; }
+    .post-page-title { font-size: 1.8rem; }
+  }
+
+  @media (max-width: 600px) {
+    .footer-grid { grid-template-columns: 1fr; }
+    .hero { padding: 1.5rem 1rem; }
+    .main-area, .matches-section { padding-left: 1rem; padding-right: 1rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- READING PROGRESS -->
+<div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+
+<!-- HEADER -->
+<header>
+  <div class="header-inner">
+    <div class="logo" onclick="showHome()">
+      <div class="logo-icon">⚽</div>
+      <div class="logo-text">Gol<span>Mundial</span></div>
+    </div>
+
+    <nav>
+      <a class="active" onclick="showHome()">Home</a>
+      <a onclick="showSection('Champions League')">Champions</a>
+      <a onclick="showSection('Premier League')">Premier</a>
+      <a onclick="showSection('La Liga')">La Liga</a>
+      <a onclick="showSection('Seleções')">Seleções</a>
+      <a onclick="showSection('Transferências')">Mercado</a>
+      <a>Sobre</a>
+    </nav>
+
+    <div class="header-right">
+      <button class="search-btn" title="Buscar">🔍</button>
+      <button class="cta-btn">Newsletter</button>
+    </div>
+  </div>
+</header>
+
+<!-- TICKER DE RESULTADOS -->
+<div class="ticker-bar">
+  <div class="ticker-label">AO VIVO</div>
+  <div class="ticker-content" id="ticker">
+    <span class="ticker-item">Real Madrid <span class="ticker-score">2 - 1</span> Bayern München</span>
+    <span class="ticker-item">Manchester City <span class="ticker-score">3 - 0</span> Arsenal</span>
+    <span class="ticker-item">Barcelona <span class="ticker-score">1 - 1</span> Atlético Madrid</span>
+    <span class="ticker-item">PSG <span class="ticker-score">4 - 2</span> Monaco</span>
+    <span class="ticker-item">Inter de Milão <span class="ticker-score">0 - 0</span> Juventus</span>
+    <span class="ticker-item">Borussia Dortmund <span class="ticker-score">2 - 3</span> Bayer Leverkusen</span>
+    <span class="ticker-item">Benfica <span class="ticker-score">1 - 0</span> Porto</span>
+    <span class="ticker-item">Ajax <span class="ticker-score">2 - 2</span> PSV</span>
+    <!-- duplicado para loop suave -->
+    <span class="ticker-item">Real Madrid <span class="ticker-score">2 - 1</span> Bayern München</span>
+    <span class="ticker-item">Manchester City <span class="ticker-score">3 - 0</span> Arsenal</span>
+    <span class="ticker-item">Barcelona <span class="ticker-score">1 - 1</span> Atlético Madrid</span>
+    <span class="ticker-item">PSG <span class="ticker-score">4 - 2</span> Monaco</span>
+    <span class="ticker-item">Inter de Milão <span class="ticker-score">0 - 0</span> Juventus</span>
+    <span class="ticker-item">Borussia Dortmund <span class="ticker-score">2 - 3</span> Bayer Leverkusen</span>
+    <span class="ticker-item">Benfica <span class="ticker-score">1 - 0</span> Porto</span>
+    <span class="ticker-item">Ajax <span class="ticker-score">2 - 2</span> PSV</span>
+  </div>
+</div>
+
+<!-- HOME PAGE -->
+<div class="page active" id="homePage">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-grid">
+      <div class="hero-main" onclick="openPost('vinicius')">
+        <div style="position:relative; height:460px; border-radius:16px; overflow:hidden; background:linear-gradient(135deg,#0a2010,#051008);">
+          <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:80px;opacity:0.15">⚽</div>
+          <div style="position:absolute;bottom:30px;right:30px;width:160px;height:200px;background:rgba(0,200,83,0.08);border-radius:12px;border:1px solid rgba(0,200,83,0.15)"></div>
+          <div style="position:absolute;top:20px;right:20px;width:80px;height:80px;border:1px solid rgba(0,200,83,0.2);border-radius:50%;"></div>
+        </div>
+        <div class="hero-gradient"></div>
+        <div class="hero-content">
+          <div class="hero-badge">🔴 Ao Vivo</div>
+          <h1 class="hero-title">Vinícius Jr. comanda o Brasil na Copa América e confirma sua era no futebol mundial</h1>
+          <div class="hero-meta">
+            <span>✍️ Rafael Monteiro</span>
+            <span>🕐 6 min de leitura</span>
+            <span>📅 24 Abr 2026</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="hero-side">
+        <div class="side-card" onclick="openPost('champions')">
+          <div style="width:110px;min-width:110px;height:100px;background:linear-gradient(135deg,#0d0d25,#060614);display:flex;align-items:center;justify-content:center;font-size:32px;">🏆</div>
+          <div class="side-body">
+            <div class="side-cat">Champions League</div>
+            <div class="side-title">Real Madrid goleia Bayern na semifinal e está na final pelo 10° ano consecutivo</div>
+            <div class="side-meta">há 2h</div>
+          </div>
+        </div>
+
+        <div class="side-card" onclick="openPost('haaland')">
+          <div style="width:110px;min-width:110px;height:100px;background:linear-gradient(135deg,#1a1032,#0d0820);display:flex;align-items:center;justify-content:center;font-size:32px;">⚡</div>
+          <div class="side-body">
+            <div class="side-cat">Premier League</div>
+            <div class="side-title">Haaland bate recorde histórico: 50 gols em uma única temporada da PL</div>
+            <div class="side-meta">há 4h</div>
+          </div>
+        </div>
+
+        <div class="side-card" onclick="openPost('mbappe')">
+          <div style="width:110px;min-width:110px;height:100px;background:linear-gradient(135deg,#1a0d0d,#2a1010);display:flex;align-items:center;justify-content:center;font-size:32px;">🦁</div>
+          <div class="side-body">
+            <div class="side-cat">La Liga</div>
+            <div class="side-title">Mbappé marca hat-trick pelo Madrid e consolida o melhor arranque de sua carreira</div>
+            <div class="side-meta">há 6h</div>
+          </div>
+        </div>
+
+        <div class="side-card" onclick="openPost('transfer')">
+          <div style="width:110px;min-width:110px;height:100px;background:linear-gradient(135deg,#1a1500,#2a2100);display:flex;align-items:center;justify-content:center;font-size:32px;">💰</div>
+          <div class="side-body">
+            <div class="side-cat">Transferências</div>
+            <div class="side-title">Mercado da bola aquecido: 3 grandes movimentos que podem mudar o verão europeu</div>
+            <div class="side-meta">há 8h</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- STATS BAR -->
+  <div class="stats-bar">
+    <div class="stats-inner">
+      <div class="stat-item"><div class="stat-num">847</div><div class="stat-label">Artigos publicados</div></div>
+      <div class="stat-item"><div class="stat-num">12</div><div class="stat-label">Ligas cobertas</div></div>
+      <div class="stat-item"><div class="stat-num">340K</div><div class="stat-label">Leitores mensais</div></div>
+      <div class="stat-item"><div class="stat-num">89</div><div class="stat-label">Países alcançados</div></div>
+      <div class="stat-item"><div class="stat-num">24/7</div><div class="stat-label">Cobertura ao vivo</div></div>
+    </div>
+  </div>
+
+  <!-- PRÓXIMOS JOGOS -->
+  <section class="matches-section">
+    <div class="section-header">
+      <div class="section-title">Próximos Jogos</div>
+      <a class="see-all">Ver agenda completa →</a>
+    </div>
+
+    <div class="matches-strip">
+      <div class="match-card">
+        <div class="match-league-label">Champions League · Semifinal</div>
+        <div class="match-teams">
+          <div class="match-team"><div class="match-team-emoji">🏴󠁧󠁢󠁥󠁮󠁧󠁿</div><div class="match-team-name">Chelsea</div></div>
+          <div class="match-vs">VS</div>
+          <div class="match-team"><div class="match-team-emoji">🇫🇷</div><div class="match-team-name">PSG</div></div>
+        </div>
+        <div class="match-time">Amanhã · 21h00</div>
+      </div>
+
+      <div class="match-card">
+        <div class="match-league-label">La Liga · Rodada 34</div>
+        <div class="match-teams">
+          <div class="match-team"><div class="match-team-emoji">🇪🇸</div><div class="match-team-name">Madrid</div></div>
+          <div class="match-score-big">2 · 1</div>
+          <div class="match-team"><div class="match-team-emoji">🇪🇸</div><div class="match-team-name">Barça</div></div>
+        </div>
+        <div class="match-time"><span class="live-badge">● ao vivo · 67'</span></div>
+      </div>
+
+      <div class="match-card">
+        <div class="match-league-label">Premier League · Rodada 36</div>
+        <div class="match-teams">
+          <div class="match-team"><div class="match-team-emoji">🏴󠁧󠁢󠁥󠁮󠁧󠁿</div><div class="match-team-name">Liverpool</div></div>
+          <div class="match-vs">VS</div>
+          <div class="match-team"><div class="match-team-emoji">🏴󠁧󠁢󠁥󠁮󠁧󠁿</div><div class="match-team-name">Man Utd</div></div>
+        </div>
+        <div class="match-time">Dom, 26 Abr · 17h30</div>
+      </div>
+
+      <div class="match-card">
+        <div class="match-league-label">Serie A · Rodada 35</div>
+        <div class="match-teams">
+          <div class="match-team"><div class="match-team-emoji">🇮🇹</div><div class="match-team-name">Inter</div></div>
+          <div class="match-vs">VS</div>
+          <div class="match-team"><div class="match-team-emoji">🇮🇹</div><div class="match-team-name">Juve</div></div>
+        </div>
+        <div class="match-time">Sáb, 25 Abr · 20h45</div>
+      </div>
+
+      <div class="match-card">
+        <div class="match-league-label">Bundesliga · Rodada 33</div>
+        <div class="match-teams">
+          <div class="match-team"><div class="match-team-emoji">🇩🇪</div><div class="match-team-name">Bayern</div></div>
+          <div class="match-vs">VS</div>
+          <div class="match-team"><div class="match-team-emoji">🇩🇪</div><div class="match-team-name">BVB</div></div>
+        </div>
+        <div class="match-time">Sáb, 25 Abr · 15h30</div>
+      </div>
+
+      <div class="match-card">
+        <div class="match-league-label">Copa América · Final</div>
+        <div class="match-teams">
+          <div class="match-team"><div class="match-team-emoji">🇧🇷</div><div class="match-team-name">Brasil</div></div>
+          <div class="match-vs">VS</div>
+          <div class="match-team"><div class="match-team-emoji">🇦🇷</div><div class="match-team-name">Argentina</div></div>
+        </div>
+        <div class="match-time">2 Mai · 22h00</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MAIN CONTENT + SIDEBAR -->
+  <div class="main-area">
+    <div class="content-left">
+
+      <!-- CAT TABS + POSTS -->
+      <div>
+        <div class="section-header">
+          <div class="section-title">Últimas Notícias</div>
+        </div>
+
+        <div class="cat-tabs" style="margin-bottom:1.5rem">
+          <div class="cat-tab active" onclick="filterCat(this,'todos')">Todos</div>
+          <div class="cat-tab" onclick="filterCat(this,'Champions League')">Champions</div>
+          <div class="cat-tab" onclick="filterCat(this,'Premier League')">Premier</div>
+          <div class="cat-tab" onclick="filterCat(this,'La Liga')">La Liga</div>
+          <div class="cat-tab" onclick="filterCat(this,'Serie A')">Serie A</div>
+          <div class="cat-tab" onclick="filterCat(this,'Seleções')">Seleções</div>
+          <div class="cat-tab" onclick="filterCat(this,'Transferências')">Mercado</div>
+          <div class="cat-tab" onclick="filterCat(this,'Análises')">Análises</div>
+        </div>
+
+        <div class="posts-grid" id="postsGrid">
+          <!-- posts gerados via JS -->
+        </div>
+      </div>
+
+    </div>
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+
+      <!-- SCORES AO VIVO -->
+      <div class="sidebar-widget">
+        <div class="widget-title">Placares</div>
+
+        <div class="score-item">
+          <div class="score-league">UCL</div>
+          <div class="score-teams">
+            <div class="score-team"><span class="team-badge" style="background:#fff1">🇪🇸</span>Real Madrid</div>
+            <div class="score-team"><span class="team-badge" style="background:#fff1">🇩🇪</span>Bayern</div>
+          </div>
+          <div class="score-result">
+            <div class="score-nums"><div class="score-num">2</div><div class="score-num">1</div></div>
+            <div class="score-status live">75'</div>
+          </div>
+        </div>
+
+        <div class="score-item">
+          <div class="score-league">LaL</div>
+          <div class="score-teams">
+            <div class="score-team"><span class="team-badge" style="background:#fff1">🇪🇸</span>Barcelona</div>
+            <div class="score-team"><span class="team-badge" style="background:#fff1">🇪🇸</span>Atlético</div>
+          </div>
+          <div class="score-result">
+            <div class="score-nums"><div class="score-num">1</div><div class="score-num">1</div></div>
+            <div class="score-status live">82'</div>
+          </div>
+        </div>
+
+        <div class="score-item">
+          <div class="score-league">PL</div>
+          <div class="score-teams">
+            <div class="score-team"><span class="team-badge" style="background:#fff1">🏴󠁧󠁢󠁥󠁮󠁧󠁿</span>Man City</div>
+            <div class="score-team"><span class="team-badge" style="background:#fff1">🏴󠁧󠁢󠁥󠁮󠁧󠁿</span>Arsenal</div>
+          </div>
+          <div class="score-result">
+            <div class="score-nums"><div class="score-num">3</div><div class="score-num">0</div></div>
+            <div class="score-status fim">FIM</div>
+          </div>
+        </div>
+
+        <div class="score-item">
+          <div class="score-league">SA</div>
+          <div class="score-teams">
+            <div class="score-team"><span class="team-badge" style="background:#fff1">🇮🇹</span>Inter</div>
+            <div class="score-team"><span class="team-badge" style="background:#fff1">🇮🇹</span>Juventus</div>
+          </div>
+          <div class="score-result">
+            <div class="score-nums"><div class="score-num">0</div><div class="score-num">0</div></div>
+            <div class="score-status live">34'</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- NEWSLETTER -->
+      <div class="newsletter-widget">
+        <div class="newsletter-title">Fique Por Dentro</div>
+        <p class="newsletter-sub">Receba os melhores gols, análises e notícias do futebol mundial toda manhã.</p>
+        <input type="email" class="newsletter-input" placeholder="seu@email.com" />
+        <button class="newsletter-btn" onclick="subscribeNewsletter()">⚡ Quero Receber</button>
+      </div>
+
+      <!-- TRENDING -->
+      <div class="sidebar-widget">
+        <div class="widget-title">Mais Lidos</div>
+        <div class="trending-item" onclick="openPost('champions')">
+          <div class="trending-num top">01</div>
+          <div>
+            <div class="trending-title">Real Madrid na final: o domínio europeu que não tem fim</div>
+            <div class="trending-cat">Champions League · 48k leituras</div>
+          </div>
+        </div>
+        <div class="trending-item" onclick="openPost('haaland')">
+          <div class="trending-num top">02</div>
+          <div>
+            <div class="trending-title">Haaland e o recorde que redefiniu o que é ser centroavante</div>
+            <div class="trending-cat">Premier League · 31k leituras</div>
+          </div>
+        </div>
+        <div class="trending-item">
+          <div class="trending-num">03</div>
+          <div>
+            <div class="trending-title">Os 10 maiores clássicos da história da Champions League</div>
+            <div class="trending-cat">Análises · 28k leituras</div>
+          </div>
+        </div>
+        <div class="trending-item">
+          <div class="trending-num">04</div>
+          <div>
+            <div class="trending-title">Quem vai vencer a Bola de Ouro 2026? Análise completa</div>
+            <div class="trending-cat">Especial · 22k leituras</div>
+          </div>
+        </div>
+        <div class="trending-item">
+          <div class="trending-num">05</div>
+          <div>
+            <div class="trending-title">Verão quente: as 5 transferências que vão agitar o mercado</div>
+            <div class="trending-cat">Transferências · 19k leituras</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAGS -->
+      <div class="sidebar-widget">
+        <div class="widget-title">Tópicos</div>
+        <div class="tags-cloud">
+          <span class="tag">Vinícius Jr</span>
+          <span class="tag">Champions League</span>
+          <span class="tag">Real Madrid</span>
+          <span class="tag">Premier League</span>
+          <span class="tag">Haaland</span>
+          <span class="tag">Mbappé</span>
+          <span class="tag">Copa América</span>
+          <span class="tag">Transferências</span>
+          <span class="tag">La Liga</span>
+          <span class="tag">Serie A</span>
+          <span class="tag">Bundesliga</span>
+          <span class="tag">Bola de Ouro</span>
+          <span class="tag">Seleção Brasileira</span>
+          <span class="tag">Análises Táticas</span>
+        </div>
+      </div>
+
+    </aside>
+  </div>
+
+</div><!-- end homePage -->
+
+<!-- POST PAGE -->
+<div class="page" id="postPage">
+  <div class="post-page">
+    <div class="back-btn" onclick="showHome()">← Voltar para o início</div>
+    <div id="postContent"></div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-logo-text">Gol<span>Mundial</span></div>
+        <p class="footer-desc">O futebol sem fronteiras. Cobertura completa das principais ligas, competições e seleções do mundo todo, 24 horas por dia.</p>
+        <div class="footer-socials">
+          <a class="social-btn" title="Instagram">📸</a>
+          <a class="social-btn" title="Twitter/X">🐦</a>
+          <a class="social-btn" title="YouTube">▶️</a>
+          <a class="social-btn" title="WhatsApp">💬</a>
+        </div>
+      </div>
+
+      <div>
+        <div class="footer-col-title">Ligas</div>
+        <ul class="footer-links">
+          <li><a>Champions League</a></li>
+          <li><a>Premier League</a></li>
+          <li><a>La Liga</a></li>
+          <li><a>Serie A</a></li>
+          <li><a>Bundesliga</a></li>
+          <li><a>Ligue 1</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <div class="footer-col-title">Competições</div>
+        <ul class="footer-links">
+          <li><a>Copa do Mundo</a></li>
+          <li><a>Copa América</a></li>
+          <li><a>Eurocopa</a></li>
+          <li><a>Copa Libertadores</a></li>
+          <li><a>Copa Africa</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <div class="footer-col-title">Blog</div>
+        <ul class="footer-links">
+          <li><a>Últimas notícias</a></li>
+          <li><a>Análises táticas</a></li>
+          <li><a>Mercado da bola</a></li>
+          <li><a>Histórias do futebol</a></li>
+          <li><a>Sobre nós</a></li>
+          <li><a>Contato</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <p>© 2026 GolMundial · Todos os direitos reservados.</p>
+      <div class="footer-bottom-links">
+        <a>Privacidade</a>
+        <a>Termos de Uso</a>
+        <a>RSS Feed</a>
+        <a>Sitemap</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+const posts = [
+  {
+    id: 'vinicius',
+    cat: 'Seleções',
+    title: 'Vinícius Jr. comanda o Brasil na Copa América e confirma sua era no futebol mundial',
+    excerpt: 'Com três gols e duas assistências nas quartas, o camisa 7 brasileiro consolida seu status de melhor jogador do planeta.',
+    author: 'RM',
+    authorName: 'Rafael Monteiro',
+    date: '24 Abr 2026',
+    read: '6 min',
+    emoji: '🇧🇷',
+    bg: 'linear-gradient(135deg,#0a2010,#051008)',
+    content: `
+      <p>Era uma noite quente em Miami quando Vinícius Júnior tocou na bola pela primeira vez. Sessenta e dois mil torcedores presos à respiração, e o camisa 7 do Brasil já sabia o que ia acontecer. Driblou o primeiro adversário como se não existisse. Partiu para o segundo. No terceiro, o estádio explodiu antes mesmo do gol.</p>
+      <h2>Uma geração que não pede licença</h2>
+      <p>A Copa América de 2026 está sendo o palco da consagração definitiva de uma era. Não apenas de um jogador — de um modo de jogar. Vinícius representa a fusão entre a ginga brasileira de sempre e a eficiência clínica que o futebol moderno exige.</p>
+      <blockquote>"Não vim aqui para ser o melhor do Brasil. Vim para ser o melhor do mundo — e mostrar que é possível com alegria." — Vinícius Jr.</blockquote>
+      <p>Nas quartas de final contra o Uruguai, o atacante marcou duas vezes no segundo tempo, ambas depois de jogadas que partiram dos seus próprios pés. Não é sorte. É repetição de um padrão que os clubes europeus já mapearam e ainda não conseguiram anular.</p>
+      <h2>O que os dados dizem</h2>
+      <p>Segundo a análise estatística da competição, Vinícius lidera em dribles completados (18), grandes chances criadas (11) e xG participado (6.2). Nenhum jogador nos últimos 20 anos de Copa América chegou a esses números na mesma fase do torneio.</p>
+      <p>A final contra a Argentina está marcada para 2 de maio. Messi do outro lado. A narrativa, já escrita pelo próprio futebol.</p>
+    `
+  },
+  {
+    id: 'champions',
+    cat: 'Champions League',
+    title: 'Real Madrid goleia Bayern e está na final pelo 10° ano consecutivo',
+    excerpt: 'Mbappé e Bellingham destruíram a defesa bávara. 4-1 no agregado garante o passaporte a Wembley.',
+    author: 'CA',
+    authorName: 'Carlos Alanis',
+    date: '23 Abr 2026',
+    read: '5 min',
+    emoji: '🏆',
+    bg: 'linear-gradient(135deg,#0d0d25,#060614)',
+    content: `
+      <p>O Santiago Bernabéu voltou a rugir. Desta vez, o rugido ecoou pela Europa inteira. O Real Madrid é mais uma vez finalista da Champions League, numa exibição que misturou classe, eficiência e o DNA europeu que o clube carrega desde os tempos de Di Stéfano.</p>
+      <h2>A noite de Mbappé e Bellingham</h2>
+      <p>Se havia alguma dúvida sobre a dupla mais letal do futebol atual, ela ficou sepultada no gramado do Bernabéu. Mbappé abriu o placar com um gol de fora da área que não deveria ser possível. Bellingham respondeu com dois gols em dez minutos.</p>
+      <blockquote>"Este clube tem magia. Você sente isso quando coloca a camisa. E transfere tudo para o campo." — Kylian Mbappé</blockquote>
+      <p>Bayern tentou reagir no segundo tempo com Kane, que marcou o gol de honra bávaro. Mas o Madrid já havia construído uma muralha.</p>
+    `
+  },
+  {
+    id: 'haaland',
+    cat: 'Premier League',
+    title: 'Haaland bate recorde histórico: 50 gols em uma única temporada da Premier League',
+    excerpt: 'O norueguês superou a marca de Salah e entra definitivamente para o livro dos recordes do futebol inglês.',
+    author: 'PS',
+    authorName: 'Pedro Souza',
+    date: '22 Abr 2026',
+    read: '4 min',
+    emoji: '⚡',
+    bg: 'linear-gradient(135deg,#1a1032,#0d0820)',
+    content: `
+      <p>Cinquenta gols. Em uma temporada. O número parece absurdo até você perceber que estamos falando de Erling Haaland — um ser humano que parece ter sido programado exclusivamente para marcar gols.</p>
+      <h2>O recorde que parecia impossível</h2>
+      <p>Quando Mohammed Salah marcou 32 gols na Premier League em 2017/18, todos acharam que esse recorde duraria décadas. Haaland o quebrou em dois anos. Agora, com 50 gols nesta temporada, o norueguês entrou em território que nenhum ser humano havia pisado antes.</p>
+      <p>O gol 50 veio de pênalti, aos 88 minutos, contra o Chelsea. O Etihad Stadium parou. Cinquenta mil pessoas de pé. Uma ovação de oito minutos.</p>
+    `
+  },
+  {
+    id: 'mbappe',
+    cat: 'La Liga',
+    title: 'Mbappé marca hat-trick e confirma melhor arranque em La Liga',
+    excerpt: 'Francês domina os números do campeonato espanhol e silencia os últimos críticos com atuação histórica.',
+    author: 'JG',
+    authorName: 'Julia Gomes',
+    date: '21 Abr 2026',
+    read: '4 min',
+    emoji: '🦁',
+    bg: 'linear-gradient(135deg,#1a0d0d,#2a1010)',
+    content: `<p>Artigo sobre o hat-trick de Mbappé e seu desempenho em La Liga...</p>`
+  },
+  {
+    id: 'transfer',
+    cat: 'Transferências',
+    title: '5 transferências bombásticas que podem explodir no verão europeu de 2026',
+    excerpt: 'De Rodri ao Manchester United a um possível retorno de Neymar à Europa, o mercado promete agitar o futebol.',
+    author: 'RM',
+    authorName: 'Rafael Monteiro',
+    date: '20 Abr 2026',
+    read: '7 min',
+    emoji: '💰',
+    bg: 'linear-gradient(135deg,#1a1500,#2a2100)',
+    content: `<p>O mercado de transferências de verão se aproxima com rumores que podem remodelar o futebol europeu...</p>`
+  },
+  {
+    id: 'tatica',
+    cat: 'Análises',
+    title: 'A revolução da linha de três: por que os melhores times do mundo adotaram o 3-4-3',
+    excerpt: 'Análise tática profunda sobre a formação que está dominando as grandes ligas europeias em 2026.',
+    author: 'PS',
+    authorName: 'Pedro Souza',
+    date: '19 Abr 2026',
+    read: '9 min',
+    emoji: '📊',
+    bg: 'linear-gradient(135deg,#001a2a,#000d1a)',
+    content: `<p>A revolução tática do 3-4-3 está transformando o futebol moderno...</p>`
+  }
+];
+
+let currentFilter = 'todos';
+
+function renderPosts(filter) {
+  const grid = document.getElementById('postsGrid');
+  const filtered = filter === 'todos' ? posts : posts.filter(p => p.cat === filter);
+  
+  grid.innerHTML = filtered.map((p, i) => {
+    const wide = i === 0;
+    return `
+      <div class="post-card${wide ? ' wide' : ''}" onclick="openPost('${p.id}')">
+        <div class="post-img-wrap" style="${wide ? '' : ''}">
+          <div style="width:100%;height:${wide ? '100%' : '180px'};min-height:${wide ? '200px' : '180px'};background:${p.bg};display:flex;align-items:center;justify-content:center;font-size:${wide ? '56px' : '40px'};opacity:0.8">${p.emoji}</div>
+          <div class="post-cat">${p.cat}</div>
+        </div>
+        <div class="post-body">
+          <div class="post-title">${p.title}</div>
+          <div class="post-excerpt">${p.excerpt}</div>
+          <div class="post-footer">
+            <div class="post-author">
+              <div class="author-ava">${p.author}</div>
+              <span class="author-name">${p.authorName}</span>
+            </div>
+            <span class="post-date">${p.date} · ${p.read}</span>
+          </div>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+function filterCat(el, cat) {
+  document.querySelectorAll('.cat-tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  currentFilter = cat;
+  renderPosts(cat);
+}
+
+function openPost(id) {
+  const p = posts.find(x => x.id === id);
+  if (!p) return;
+  
+  document.getElementById('postContent').innerHTML = `
+    <div class="post-page-header">
+      <span class="post-page-cat">${p.cat}</span>
+      <h1 class="post-page-title">${p.title}</h1>
+      <div class="post-page-meta">
+        <span><div class="author-ava" style="width:28px;height:28px;font-size:11px;display:inline-flex;align-items:center;justify-content:center;background:var(--green);color:var(--black);border-radius:50%;font-weight:700">${p.author}</div> ${p.authorName}</span>
+        <span>📅 ${p.date}</span>
+        <span>🕐 ${p.read} de leitura</span>
+      </div>
+    </div>
+    <div class="post-feature-img">
+      <div style="width:100%;height:100%;background:${p.bg};display:flex;align-items:center;justify-content:center;font-size:80px;opacity:0.7">${p.emoji}</div>
+    </div>
+    <div class="post-content">${p.content}</div>
+    <div class="post-share">
+      <span class="share-label">Compartilhar:</span>
+      <button class="share-btn whatsapp">WhatsApp</button>
+      <button class="share-btn twitter">Twitter / X</button>
+      <button class="share-btn">LinkedIn</button>
+      <button class="share-btn" onclick="navigator.clipboard&&navigator.clipboard.writeText(location.href)">🔗 Copiar link</button>
+    </div>
+  `;
+  
+  document.getElementById('homePage').classList.remove('active');
+  document.getElementById('postPage').classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function showHome() {
+  document.getElementById('homePage').classList.add('active');
+  document.getElementById('postPage').classList.remove('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function showSection(cat) {
+  showHome();
+  setTimeout(() => {
+    const tab = [...document.querySelectorAll('.cat-tab')].find(t => t.textContent === cat || t.textContent.includes(cat.split(' ')[0]));
+    if (tab) filterCat(tab, cat);
+    document.querySelector('.posts-grid')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }, 100);
+}
+
+function subscribeNewsletter() {
+  const input = document.querySelector('.newsletter-input');
+  if (input.value && input.value.includes('@')) {
+    input.value = '✅ Inscrito com sucesso!';
+    input.style.borderColor = 'var(--green)';
+    setTimeout(() => { input.value = ''; input.style.borderColor = ''; }, 3000);
+  } else {
+    input.style.borderColor = '#E53935';
+    setTimeout(() => { input.style.borderColor = ''; }, 2000);
+  }
+}
+
+// PROGRESS BAR
+window.addEventListener('scroll', () => {
+  const doc = document.documentElement;
+  const scrolled = doc.scrollTop / (doc.scrollHeight - doc.clientHeight) * 100;
+  document.getElementById('progressFill').style.width = Math.round(scrolled) + '%';
+});
+
+// INIT
+renderPosts('todos');
+</script>
+</body>
+</html>
